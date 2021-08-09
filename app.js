@@ -7,6 +7,11 @@ const context = await browser.newContext({
   viewport: { width: 1200, height: 628 },
 });
 
+await context.route(/\.avif$/, (route) => {
+  const url = route.request().url();
+  route.continue({ url: url.substr(0, url.length - 5) + ".webp" });
+});
+
 const app = express();
 const port = 8080;
 
@@ -25,10 +30,10 @@ app.get("/:site", async (req, res) => {
     console.warn(Date(), response.status());
     return res.status(404).end();
   }
-  res.setHeader("Content-Type", `image/png`);
+  res.setHeader("Content-Type", "image/png");
   res.setHeader(
     "Cache-Control",
-    `public, no-transform, s-maxage=86400, max-age=0`
+    "public, no-transform, s-maxage=86400, max-age=0"
   );
   res.setHeader("x-size", JSON.stringify(page.viewportSize()));
   const file = await page.screenshot();
