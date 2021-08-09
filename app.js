@@ -21,7 +21,8 @@ app.get("/:site", async (req, res) => {
   const page = await context.newPage();
   const url = `https://${site}${urlPath}`;
   const response = await page.goto(url).catch(() => {});
-  if (!response || response.status() !== 200) {
+  if (!response || ![200, 304].includes(response.status())) {
+    console.warn(Date(), response.status());
     return res.status(404).end();
   }
   res.setHeader("Content-Type", `image/png`);
