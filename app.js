@@ -1,6 +1,12 @@
 import express from "express"
 import { chromium } from "playwright"
 
+const browser = await chromium.launch()
+const context = await browser.newContext({
+  deviceScaleFactor: 2.5,
+  viewport: { width: 1200, height: 628 },
+})
+
 const app = express()
 const port = 8080
 
@@ -12,11 +18,6 @@ app.get("/:site", async (req, res) => {
   if (!siteWhitelist.includes(site) || !urlPath || !urlPath.startsWith("/")) {
     return res.status(403).end()
   }
-  const browser = await chromium.launch()
-  const context = await browser.newContext({
-    deviceScaleFactor: 2.5,
-    viewport: { width: 1200, height: 628 },
-  })
   const page = await context.newPage()
   const url = `https://${site}${urlPath}`
   const response = await page.goto(url).catch(() => {})
@@ -30,7 +31,8 @@ app.get("/:site", async (req, res) => {
   )
   res.setHeader("x-size", JSON.stringify(page.viewportSize()))
   const file = await page.screenshot()
-  await browser.close()
+  await page.close()
+  console.log(Date(), url)
   return res.end(file)
 })
 
