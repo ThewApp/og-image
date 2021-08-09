@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
     libcups2 libdrm2 libdbus-1-3 libxkbcommon0 \
     libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
     libgbm1 libasound2 libatspi2.0-0 libxshmfence1 \
+    fonts-thai-tlwg \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
