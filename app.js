@@ -1,4 +1,4 @@
-import express from "express";
+import fastify from "fastify";
 import { chromium } from "playwright";
 
 const browser = await chromium.launch();
@@ -12,40 +12,50 @@ await context.route(/\.avif$/, (route) => {
   route.continue({ url: url.substr(0, url.length - 5) + ".webp" });
 });
 
-const app = express();
+const app = fastify({
+  logger: true,
+});
 const port = 8080;
 
 const siteWhitelist = ["www.thewdhanat.com"];
 
-app.get("/:site", async (req, res) => {
-  const urlPath = req.query.path;
-  const site = req.params.site;
-  if (!siteWhitelist.includes(site) || !urlPath || !urlPath.startsWith("/")) {
-    return res.status(403).end();
+async function handleImage(request, reply) {
+  const urlPath = request.query.path;
+
+  if (!urlPath || !urlPath.startsWith("/")) {
+    return reply.code(403).send();
   }
+
   const page = await context.newPage();
-  const url = `https://${site}${urlPath}`;
+  const url = `https://${this.site}${urlPath}`;
+  reply.header("x-image-url", url);
   const response = await page.goto(url).catch(() => {});
   if (!response || ![200, 304].includes(response.status())) {
-    console.warn(Date(), response.status());
-    return res.status(404).end();
+    app.log.warn(response.status());
+    return reply.code(404).send();
   }
-  res.setHeader("Content-Type", "image/png");
-  res.setHeader(
+  reply.header("Content-Type", "image/png");
+  reply.header(
     "Cache-Control",
     "public, no-transform, s-maxage=86400, max-age=0"
   );
-  res.setHeader("x-size", JSON.stringify(page.viewportSize()));
+  reply.header("x-image-size", JSON.stringify(page.viewportSize()));
   const file = await page.screenshot();
   await page.close();
-  console.log(Date(), url);
-  return res.end(file);
+  return file;
+}
+
+siteWhitelist.forEach((site) => {
+  app.get(`/${site}`, handleImage.bind({ site }));
+  app.get(`/${site}/`, handleImage.bind({ site }));
+  app.get(`/${site}/:image.png`, handleImage.bind({ site }));
 });
 
-app.all("/*", (req, res) => {
-  res.status(400).end();
+app.setNotFoundHandler(async (request, reply) => {
+  return reply.code(400).send();
 });
 
-app.listen(port, () => {
-  console.log(`og-image app listening at http://localhost:${port}`);
+app.listen(port).catch((err) => {
+  app.log.error("Error starting server:", err);
+  process.exit(1);
 });
