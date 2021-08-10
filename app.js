@@ -15,7 +15,6 @@ await context.route(/\.avif$/, (route) => {
 const app = fastify({
   logger: true,
 });
-const port = 8080;
 
 const siteWhitelist = ["www.thewdhanat.com"];
 
@@ -55,7 +54,7 @@ app.setNotFoundHandler(async (request, reply) => {
   return reply.code(400).send();
 });
 
-app.listen(port).catch((err) => {
+app.listen(8080, "0.0.0.0").catch((err) => {
   app.log.error("Error starting server:", err);
   process.exit(1);
 });
