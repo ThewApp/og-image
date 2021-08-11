@@ -16,7 +16,7 @@ const app = fastify({
   logger: true,
 });
 
-const siteWhitelist = ["www.thewdhanat.com"];
+const hostnameWhitelist = ["www.thewdhanat.com"];
 
 async function handleImage(request, reply) {
   const urlPath = request.query.path;
@@ -26,7 +26,7 @@ async function handleImage(request, reply) {
   }
 
   const page = await context.newPage();
-  const url = `https://${this.site}${urlPath}`;
+  const url = `https://${this.hostname}${urlPath}`;
   reply.header("x-image-url", url);
   const response = await page.goto(url).catch(() => {});
   if (!response || ![200, 304].includes(response.status())) {
@@ -44,9 +44,9 @@ async function handleImage(request, reply) {
   return file;
 }
 
-siteWhitelist.forEach((site) => {
-  app.get(`/${site}.png`, handleImage.bind({ site }));
-  app.get(`/${site}/:image.png`, handleImage.bind({ site }));
+hostnameWhitelist.forEach((hostname) => {
+  app.get(`/${hostname}.png`, handleImage.bind({ hostname }));
+  app.get(`/${hostname}/:image.png`, handleImage.bind({ hostname }));
 });
 
 app.setNotFoundHandler(async (request, reply) => {

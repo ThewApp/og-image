@@ -22,13 +22,13 @@ Stop
 docker stop og-image && docker rm og-image
 ```
 
-## Paths
+## Endpoints
 
 ```
-/<site>.png
-/<site>/<any>.png
+/<hostname>.png?path=/<path>
+/<hostname>/<any>.png?path=/<path>
 ```
 
-`<site>`
+`<hostname>`
 
 - www.thewdhanat.com
