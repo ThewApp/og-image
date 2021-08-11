@@ -22,7 +22,7 @@ async function handleImage(request, reply) {
   const urlPath = request.query.path;
 
   if (!urlPath || !urlPath.startsWith("/")) {
-    return reply.code(403).send();
+    return reply.code(400).send();
   }
 
   const page = await context.newPage();
@@ -45,13 +45,12 @@ async function handleImage(request, reply) {
 }
 
 siteWhitelist.forEach((site) => {
-  app.get(`/${site}`, handleImage.bind({ site }));
-  app.get(`/${site}/`, handleImage.bind({ site }));
+  app.get(`/${site}.png`, handleImage.bind({ site }));
   app.get(`/${site}/:image.png`, handleImage.bind({ site }));
 });
 
 app.setNotFoundHandler(async (request, reply) => {
-  return reply.code(400).send();
+  return reply.code(403).send();
 });
 
 app.listen(8080, "0.0.0.0").catch((err) => {
