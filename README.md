@@ -21,3 +21,14 @@ Stop
 ```sh
 docker stop og-image && docker rm og-image
 ```
+
+## Paths
+
+```
+/<site>.png
+/<site>/<any>.png
+```
+
+`<site>`
+
+- www.thewdhanat.com
