@@ -29,6 +29,12 @@ docker stop og-image && docker rm og-image
 /<hostname>/<any>.png?path=/<path>
 ```
 
-`<hostname>`
+Optional `<hash>` without leading `#`
+
+```
+/<hostname>/<any>.png?path=/<path>&hash=<hash>
+```
+
+### Accepted `<hostname>`
 
 - www.thewdhanat.com

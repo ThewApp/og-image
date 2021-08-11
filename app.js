@@ -20,14 +20,17 @@ const hostnameWhitelist = ["www.thewdhanat.com"];
 
 async function handleImage(request, reply) {
   const urlPath = request.query.path;
+  const urlHash = request.query.hash;
 
   if (!urlPath || !urlPath.startsWith("/")) {
     return reply.code(400).send();
   }
 
   const page = await context.newPage();
-  const url = `https://${this.hostname}${urlPath}`;
-  reply.header("x-image-url", url);
+  const url = `https://${this.hostname}${urlPath}${
+    urlHash ? "#" + urlHash : ""
+  }`;
+  reply.header("x-image-url", encodeURI(url));
   const response = await page.goto(url).catch(() => {});
   if (!response || ![200, 304].includes(response.status())) {
     fastify.log.warn(response.status());
