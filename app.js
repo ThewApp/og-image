@@ -1,4 +1,4 @@
-import fastify from "fastify";
+import Fastify from "fastify";
 import { chromium } from "playwright";
 
 const browser = await chromium.launch();
@@ -12,7 +12,7 @@ await context.route(/\.avif$/, (route) => {
   route.continue({ url: url.substr(0, url.length - 5) + ".webp" });
 });
 
-const app = fastify({
+const fastify = Fastify({
   logger: true,
 });
 
@@ -30,7 +30,7 @@ async function handleImage(request, reply) {
   reply.header("x-image-url", url);
   const response = await page.goto(url).catch(() => {});
   if (!response || ![200, 304].includes(response.status())) {
-    app.log.warn(response.status());
+    fastify.log.warn(response.status());
     return reply.code(404).send();
   }
   reply.header("Content-Type", "image/png");
@@ -45,15 +45,15 @@ async function handleImage(request, reply) {
 }
 
 hostnameWhitelist.forEach((hostname) => {
-  app.get(`/${hostname}.png`, handleImage.bind({ hostname }));
-  app.get(`/${hostname}/:image.png`, handleImage.bind({ hostname }));
+  fastify.get(`/${hostname}.png`, handleImage.bind({ hostname }));
+  fastify.get(`/${hostname}/:image.png`, handleImage.bind({ hostname }));
 });
 
-app.setNotFoundHandler(async (request, reply) => {
+fastify.setNotFoundHandler(async (request, reply) => {
   return reply.code(403).send();
 });
 
-app.listen(8080, "0.0.0.0").catch((err) => {
-  app.log.error("Error starting server:", err);
+fastify.listen(8080, "0.0.0.0").catch((err) => {
+  fastify.log.error("Error starting server:", err);
   process.exit(1);
 });
