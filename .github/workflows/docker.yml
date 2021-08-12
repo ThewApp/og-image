@@ -43,8 +43,6 @@ jobs:
       - name: Run app
         run: docker run -d -p 8080:8080 "$IMAGE"
       - name: Test / for 403
-        # Retry every 2 seconds for 15 times
         run: |
-          STATUS=$(curl --retry-connrefused --retry 15 --retry-delay 2 -vw "%{http_code}" 127.0.0.1:8080)
-          echo $STATUS
-          test $STATUS = "403"
+          sleep 10
+          test $(curl -vw "%{http_code}" localhost:8080) = "403"
