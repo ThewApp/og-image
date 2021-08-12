@@ -2,6 +2,12 @@
 
 Node.js application to capture and generate an open graph image.
 
+## Examples
+
+- [Image for https://www.thewdhanat.com/](https://og-image.thewdhanat.com/www.thewdhanat.com/image.png?path=/)
+- [Image for https://www.thewdhanat.com/blog/](https://og-image.thewdhanat.com/www.thewdhanat.com/image.png?path=/blog/)
+- [Image for https://www.thewdhanat.com/blog/how-to-use-local-fonts-in-google-docs-sheets-slides/#supported-fonts](https://og-image.thewdhanat.com/www.thewdhanat.com/image.png?path=/blog/how-to-use-local-fonts-in-google-docs-sheets-slides/%23supported-fonts)
+
 ## Usage
 
 Pull new image
@@ -29,11 +35,7 @@ docker stop og-image && docker rm og-image
 /<hostname>/<any>.png?path=/<path>
 ```
 
-Optional `<hash>` without leading `#`
-
-```
-/<hostname>/<any>.png?path=/<path>&hash=<hash>
-```
+`<path>` must have leading `/` and encoded with [`encodeURIComponent`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent). Hence `path` can contain query (?) and url fragment (#).
 
 ### Accepted `<hostname>`
 
