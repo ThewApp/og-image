@@ -1,5 +1,7 @@
 # og-image
 
+[![.github/workflows/docker.yml](https://github.com/ThewApp/og-image/actions/workflows/docker.yml/badge.svg)](https://github.com/ThewApp/og-image/actions/workflows/docker.yml)
+
 Node.js application to capture and generate an open graph image.
 
 ## Examples
