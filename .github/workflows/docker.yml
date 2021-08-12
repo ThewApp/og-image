@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
+          cache-from: type=registry,ref=${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
@@ -42,4 +42,4 @@ jobs:
       - name: Run app
         run: docker run -d -p 8080:8080 "$IMAGE"
       - name:
-        run: test $(curl -sw "%{http_code}" localhost:8080 2>/dev/null) = "403"
+        run: test $(curl -sw "%{http_code}" localhost:8080) = "403"
