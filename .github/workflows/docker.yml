@@ -22,9 +22,6 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      - name: Pull main build
-        run: docker pull $(echo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} | tr "[:upper:]" "[:lower:]"):main
-        continue-on-error: true
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
@@ -48,6 +45,6 @@ jobs:
       - name: Test / for 403
         # Retry every 2 seconds for 15 times
         run: |
-          STATUS=$(curl --retry-connrefused --retry 15 --retry-delay 2 -sw "%{http_code}" 127.0.0.1:8080)
+          STATUS=$(curl --retry-connrefused --retry 15 --retry-delay 2 -vw "%{http_code}" 127.0.0.1:8080)
           echo $STATUS
           test $STATUS = "403"
