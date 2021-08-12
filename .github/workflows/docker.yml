@@ -31,7 +31,7 @@ jobs:
           push: true
           cache-from: type=registry,ref=${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           cache-to: type=inline
-          no-cache: ${{ github.event_name	== "workflow_run" }}
+          no-cache: ${{ github.event_name == 'workflow_dispatch' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
