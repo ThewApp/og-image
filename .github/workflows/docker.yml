@@ -1,4 +1,4 @@
-on: push
+on: [push, workflow_run]
 
 env:
   REGISTRY: ghcr.io
@@ -22,12 +22,16 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
+      - name: Pull main build
+        run: docker pull $(echo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} | tr "[:upper:]" "[:lower:]"):main
+        continue-on-error: true
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           push: true
           cache-from: type=registry,ref=${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+          cache-to: type=inline
+          no-cache: ${{ github.event_name	== "workflow_run" }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
@@ -41,5 +45,6 @@ jobs:
         run: docker pull "$IMAGE"
       - name: Run app
         run: docker run -d -p 8080:8080 "$IMAGE"
-      - name:
-        run: test $(curl -sw "%{http_code}" localhost:8080) = "403"
+      - name: Test / for 403
+        # Retry every 2 seconds for 15 times
+        run: test $(curl --retry-connrefused --retry 15 --retry-delay 2 -sw "%{http_code}" 127.0.0.1:8080) = "403"
