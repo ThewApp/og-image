@@ -48,7 +48,7 @@ jobs:
           for n in $(seq 1 20)
           do
             echo "Trying $n"
-            test $(curl -vw "%{http_code}" localhost:8080) = "403" && exit 0
+            test $(curl -sw "%{http_code}" localhost:8080) = "403" && echo "403" && exit 0
             sleep 1
           done
           exit 1
