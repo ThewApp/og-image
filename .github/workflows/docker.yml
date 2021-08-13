@@ -43,6 +43,4 @@ jobs:
       - name: Run app
         run: docker run -d -p 8080:8080 "$IMAGE"
       - name: Test / for 403
-        run: |
-          sleep 10
-          test $(curl -vw "%{http_code}" localhost:8080) = "403"
+        run: test $(curl --retry 10 --retry-connrefused -vw "%{http_code}" localhost:8080) = "403"
