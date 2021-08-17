@@ -1,8 +1,8 @@
 {
   "type": "module",
   "dependencies": {
-    "fastify": "^3.20.1",
-    "playwright": "^1.13.1"
+    "fastify": "^3.20.2",
+    "playwright": "^1.14.0"
   },
   "devDependencies": {
     "prettier": "^2.3.2"
