@@ -7,6 +7,7 @@ env:
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
     outputs:
       meta: ${{ steps.meta.outputs.json }}
     steps:
@@ -42,6 +43,50 @@ jobs:
         run: docker pull "$IMAGE"
       - name: Run app
         run: docker run -d -p 8080:8080 "$IMAGE"
+      - name: Test / for 403
+        run: |
+          # Retry every 1 second for 20 times
+          for n in $(seq 1 20)
+          do
+            echo "Trying $n"
+            test $(curl -sw "%{http_code}" localhost:8080) = "403" && echo "403" && exit 0
+            sleep 1
+          done
+          exit 1
+
+  build-and-test-image:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Extract main metadata (tags, labels) for Docker
+        id: main-meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,branch=${{ github.event.repository.default_branch }}
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          cache-from: type=registry,ref=${{ fromJSON(steps.main-meta.outputs.json).tags[0] }}
+          cache-to: type=inline
+          tags: ${{ steps.meta.outputs.tags }}
+      - name: Run app
+        run: docker run -d -p 8080:8080 "$IMAGE"
+        env:
+          IMAGE: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
       - name: Test / for 403
         run: |
           # Retry every 1 second for 20 times
