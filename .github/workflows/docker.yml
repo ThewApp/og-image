@@ -81,7 +81,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           cache-from: type=registry,ref=${{ fromJSON(steps.main-meta.outputs.json).tags[0] }}
-          cache-to: type=inline
           tags: ${{ steps.meta.outputs.tags }}
       - name: Run app
         run: docker run -d -p 8080:8080 "$IMAGE"
