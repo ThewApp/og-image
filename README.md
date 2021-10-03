@@ -6,9 +6,9 @@ Node.js application to capture and generate an open graph image.
 
 ## Examples
 
-- [Image for https://www.thewdhanat.com/](https://og-image.thewdhanat.com/www.thewdhanat.com/image.png?path=/)
-- [Image for https://www.thewdhanat.com/blog/](https://og-image.thewdhanat.com/www.thewdhanat.com/image.png?path=/blog/)
-- [Image for https://www.thewdhanat.com/blog/how-to-use-local-fonts-in-google-docs-sheets-slides/#supported-fonts](https://og-image.thewdhanat.com/www.thewdhanat.com/image.png?path=/blog/how-to-use-local-fonts-in-google-docs-sheets-slides/%23supported-fonts)
+- [Image for https://www.thewdhanat.com/](https://og-image.thew.pro/www.thewdhanat.com/image.png?path=/)
+- [Image for https://www.thewdhanat.com/blog/](https://og-image.thew.pro/www.thewdhanat.com/image.png?path=/blog/)
+- [Image for https://www.thewdhanat.com/blog/how-to-use-local-fonts-in-google-docs-sheets-slides/#supported-fonts](https://og-image.thew.pro/www.thewdhanat.com/image.png?path=/blog/how-to-use-local-fonts-in-google-docs-sheets-slides/%23supported-fonts)
 
 ## Usage
 
