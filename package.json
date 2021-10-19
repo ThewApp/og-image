@@ -1,7 +1,7 @@
 {
   "type": "module",
   "dependencies": {
-    "fastify": "^3.21.6",
+    "fastify": "^3.22.1",
     "playwright": "^1.15.0"
   },
   "devDependencies": {
