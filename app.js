@@ -7,11 +7,6 @@ const context = await browser.newContext({
   viewport: { width: 1200, height: 628 },
 });
 
-await context.route(/\.avif$/, (route) => {
-  const url = route.request().url();
-  route.continue({ url: url.substr(0, url.length - 5) + ".webp" });
-});
-
 const fastify = Fastify({
   logger: true,
 });
