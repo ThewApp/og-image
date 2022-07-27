@@ -49,7 +49,7 @@ fastify.setNotFoundHandler(async (request, reply) => {
   return reply.code(403).send();
 });
 
-fastify.listen({ port: 8080, host: "0.0.0.0" }).catch((err) => {
+fastify.listen({ port: 8080, host: "::" }).catch((err) => {
   fastify.log.error("Error starting server:", err);
   process.exit(1);
 });
