@@ -2,7 +2,7 @@
   "type": "module",
   "dependencies": {
     "fastify": "^4.9.2",
-    "playwright": "^1.27.1"
+    "playwright": "^1.28.1"
   },
   "devDependencies": {
     "prettier": "^2.7.1"
