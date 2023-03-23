@@ -23,8 +23,11 @@ async function handleImage(request, reply) {
   const page = await context.newPage();
   const url = `https://${this.hostname}${urlPath}`;
   reply.header("x-image-url", encodeURI(url));
-  const response = await page.goto(url).catch(() => {});
-  if (!response || ![200, 304].includes(response.status())) {
+  const response = await page.goto(url).catch((err) => {
+    fastify.log.error(err)
+    return reply.code(500).send()
+  });
+  if (![200, 304].includes(response.status())) {
     fastify.log.warn(response.status());
     return reply.code(404).send();
   }
