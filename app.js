@@ -39,7 +39,7 @@ async function handleImage(request, reply) {
     "public, no-transform, s-maxage=86400, max-age=0"
   );
   reply.header("x-image-size", JSON.stringify(page.viewportSize()));
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(500);
   const file = await page.screenshot();
   await page.close();
   return file;
