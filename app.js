@@ -3,7 +3,7 @@ import { chromium } from "playwright";
 
 const browser = await chromium.launch();
 const context = await browser.newContext({
-  deviceScaleFactor: 2.5,
+  deviceScaleFactor: 2,
   viewport: { width: 1200, height: 628 },
 });
 
