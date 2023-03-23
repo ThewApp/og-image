@@ -14,8 +14,6 @@ const fastify = Fastify({
 const hostnameWhitelist = ["www.thewdhanat.com"];
 
 async function handleImage(request, reply) {
-  fastify.log.info(request.headers)
-  
   const urlPath = request.query.path;
 
   if (!urlPath || !urlPath.startsWith("/")) {
