@@ -103,7 +103,7 @@ jobs:
     steps:
       - uses: actions/delete-package-versions@v5
         with:
-          package-name: ${{ env.IMAGE_NAME }}
+          package-name: ${{ github.event.repository.name }}
           package-type: container
           min-versions-to-keep: 5
           ignore-versions: "^main$"
