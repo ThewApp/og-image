@@ -93,6 +93,17 @@ jobs:
           do
             echo "Trying $n"
             test $(curl -sw "%{http_code}" localhost:8080) = "403" && echo "403" && exit 0
+
+  prune-containers:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ github.event.repository.name }}/${{ env.IMAGE_NAME }}
+          package-type: container
+          min-versions-to-keep: 5
+          ignore-versions: "^main$"
             sleep 1
           done
           exit 1
