@@ -93,6 +93,9 @@ jobs:
           do
             echo "Trying $n"
             test $(curl -sw "%{http_code}" localhost:8080) = "403" && echo "403" && exit 0
+            sleep 1
+          done
+          exit 1
 
   prune-containers:
     runs-on: ubuntu-latest
@@ -104,6 +107,3 @@ jobs:
           package-type: container
           min-versions-to-keep: 5
           ignore-versions: "^main$"
-            sleep 1
-          done
-          exit 1
