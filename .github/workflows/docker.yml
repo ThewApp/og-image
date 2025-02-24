@@ -24,7 +24,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           push: true
           cache-from: type=registry,ref=${{ fromJSON(steps.meta.outputs.json).tags[0] }}
@@ -78,7 +78,7 @@ jobs:
           tags: |
             type=raw,value=${{ github.event.repository.default_branch }}
       - name: Build Docker image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           cache-from: type=registry,ref=${{ fromJSON(steps.main-meta.outputs.json).tags[0] }}
           tags: ${{ steps.meta.outputs.tags }}
